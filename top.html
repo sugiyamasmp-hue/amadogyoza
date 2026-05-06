@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アマドの餃子</title>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@400;700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Zen Maru Gothic', sans-serif;
+  }
+
+  .page {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* イラスト画像 */
+  .illust {
+    width: 100%;
+    display: block;
+    position: relative;
+  }
+  .illust img {
+    width: 100%;
+    display: block;
+  }
+
+  /* 餃子エリアのボタン（画像下部 約75〜90%の高さあたり） */
+  .gyoza-btn-wrap {
+    position: absolute;
+    bottom: 12%;
+    left: 8%;
+    width: 38%;
+  }
+
+  .btn-gyoza-log {
+    display: block;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid #c0392b;
+    border-radius: 24px;
+    padding: 10px 14px;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c0392b;
+    box-shadow: 0 4px 16px rgba(192,57,43,0.35);
+    transition: all 0.2s;
+    animation: pulse 2s ease-in-out infinite;
+    line-height: 1.4;
+  }
+  .btn-gyoza-log:hover {
+    background: #c0392b;
+    color: #fff;
+    transform: scale(1.05);
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(192,57,43,0.35); }
+    50% { box-shadow: 0 4px 24px rgba(192,57,43,0.65); }
+  }
+
+  .btn-emoji { font-size: 18px; display: block; }
+  .btn-text { font-size: 12px; }
+
+  /* 画像がない場合のフォールバック */
+  .no-image {
+    background: linear-gradient(135deg, #b8d4e8 0%, #e8c4a0 40%, #c8b090 100%);
+    width: 100%;
+    padding-top: 133%;
+    position: relative;
+    border-radius: 8px;
+  }
+  .no-image-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Kaisei Decol', serif;
+    font-size: 28px;
+    color: #5a3a1a;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="illust">
+    <!-- ここにアマドの画像を置く。img タグの src を画像パスに変更してください -->
+    <img src="amado.png" alt="アマドの餃子"
+         onerror="this.parentElement.innerHTML=fallbackHTML()">
+
+    <!-- 餃子の上のリンクボタン -->
+    <div class="gyoza-btn-wrap">
+      <a href="gyoza-log.html" class="btn-gyoza-log">
+        <span class="btn-emoji">🥟</span>
+        <span class="btn-text">餃子ログを開く</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+function fallbackHTML() {
+  return `
+    <div class="no-image">
+      <div class="no-image-text">
+        <span style="font-size:48px">🐶</span>
+        <span style="font-family:'Kaisei Decol',serif;font-size:28px;color:#5a3a1a;">アマドの餃子</span>
+        <span style="font-size:36px;margin-top:20px">🥟</span>
+      </div>
+    </div>
+    <div class="gyoza-btn-wrap" style="bottom:12%;left:8%;width:38%;">
+      <a href="gyoza-log.html" class="btn-gyoza-log">
+        <span class="btn-emoji">🥟</span>
+        <span class="btn-text">餃子ログを開く</span>
+      </a>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
