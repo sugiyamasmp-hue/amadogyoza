@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使い方 | アマドの餃子ログ</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--red:#c0392b;--red-pale:#fdf0ee;--bg:#fffdf9;--card:#fff;--border:#f0e8e0;--text:#2c1810;--sub:#9a7060;--green:#27ae60;--green-pale:#eafaf1;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Zen Maru Gothic',sans-serif;font-weight:300;font-size:14px;line-height:1.7;}
+  header{background:var(--red);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;}
+  .back{color:#fff;text-decoration:none;font-size:13px;opacity:.85;}
+  h1{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:600;}
+  .container{max-width:640px;margin:0 auto;padding:24px 16px 60px;}
+  .section{margin-bottom:32px;}
+  .section-title{font-family:'Shippori Mincho',serif;font-size:16px;font-weight:600;color:var(--red);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .step{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;}
+  .step-num{background:var(--red);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .step-title{font-weight:500;margin-bottom:4px;}
+  .step-desc{font-size:13px;color:var(--sub);line-height:1.7;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
+  .card-title{font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .card-desc{font-size:12px;color:var(--sub);line-height:1.8;}
+  .note{background:#fff8f0;border:1px solid #f0d8b8;border-radius:10px;padding:14px 16px;font-size:12px;color:#8a6020;line-height:1.8;margin-top:8px;}
+  .url-box{background:#f0f4ff;border:1px solid #c0ccf0;border-radius:10px;padding:14px 16px;font-size:13px;color:#2040a0;text-align:center;font-weight:500;word-break:break-all;margin:10px 0;}
+  .btn-start{display:block;width:100%;background:var(--red);color:#fff;border-radius:12px;padding:16px;text-align:center;font-size:15px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;text-decoration:none;margin-top:24px;}
+  .btn-start:hover{opacity:.85;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back">← トップ</a>
+  <h1>🥟 使い方ガイド</h1>
+</header>
+
+<div class="container">
+
+  <!-- 概要 -->
+  <div class="section">
+    <div class="section-title">📱 アプリについて</div>
+    <div class="card">
+      <div class="card-desc">
+        <strong style="color:var(--text);">アマドの餃子ログ</strong>は、家族みんなで餃子のレシピや感想を記録・共有できるアプリです。<br><br>
+        同じURLを開くだけで、家族全員の記録がリアルタイムで見られます。スマホでもPCでも使えます。登録・ログイン不要です。
+      </div>
+    </div>
+  </div>
+
+  <!-- 共有方法 -->
+  <div class="section">
+    <div class="section-title">🔗 家族への共有方法</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">このURLをLINEでシェアする</div>
+        <div class="url-box">https://amadogyoza.vercel.app</div>
+        <div class="step-desc">家族のLINEにこのURLを送るだけです。</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">URLをタップして開く</div>
+        <div class="step-desc">ブラウザで開くだけで使えます。アプリのインストール不要です。</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">ホーム画面に追加すると便利</div>
+        <div class="step-desc">
+          iPhoneは「共有ボタン→ホーム画面に追加」<br>
+          Androidは「メニュー→ホーム画面に追加」<br>
+          でアプリのように使えます。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 記録の仕方 -->
+  <div class="section">
+    <div class="section-title">✍️ 記録の仕方</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">「＋ 記録する」をタップ</div>
+        <div class="step-desc">画面右上のボタンをタップすると入力フォームが開きます。</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">内容を入力する</div>
+        <div class="step-desc">
+          餃子の名前・日付・材料・調理法・タレ・★評価・感想を入力します。<br>
+          <span style="color:var(--red);">※ 日付と評価（★）は必須です</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">「記録する」をタップ</div>
+        <div class="step-desc">保存すると一覧に表示されます。すぐに家族のスマホにも反映されます。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 各機能 -->
+  <div class="section">
+    <div class="section-title">🔧 各機能の説明</div>
+    <div class="card">
+      <div class="card-title">🔥 調理法</div>
+      <div class="card-desc">焼き・揚げ・水餃子・蒸しを複数選べます。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌱 次回への課題</div>
+      <div class="card-desc">「次はニラを増やしたい」など、次回試したいことを書いておけます。記録カードに緑色で表示されます。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">💬 コメント追加</div>
+      <div class="card-desc">他の家族が記録にコメントを追加できます。名前を入れてコメントを書いて「送信」をタップするだけです。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">✏️ 編集</div>
+      <div class="card-desc">記録の内容を後から修正できます。各カード下部の「編集」ボタンをタップしてください。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗑 削除</div>
+      <div class="card-desc">削除するには<strong style="color:var(--red);">4桁のパスワード</strong>が必要です。誤削除を防ぐためです。パスワードは家族で共有してください。</div>
+    </div>
+  </div>
+
+  <!-- 注意事項 -->
+  <div class="section">
+    <div class="section-title">⚠️ ご注意</div>
+    <div class="note">
+      ・記録したデータはクラウド（Supabase）に保存されます。<br>
+      ・URLを知っている人なら誰でも見られます。家族以外には教えないようにしましょう。<br>
+      ・削除したデータは元に戻せません。パスワードは大切に管理してください。<br>
+      ・インターネット接続が必要です。
+    </div>
+  </div>
+
+  <a href="gyoza-log.html" class="btn-start">🥟 餃子ログを開く</a>
+
+</div>
+</body>
+</html>

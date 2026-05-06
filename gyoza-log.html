@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>餃子ログ 🥟</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:#c0392b; --red-pale:#fdf0ee; --orange:#e67e22; --yellow:#f39c12;
+    --green:#27ae60; --green-pale:#eafaf1; --blue:#2980b9; --blue-pale:#eaf4fb;
+    --bg:#fffdf9; --card:#fff; --border:#f0e8e0; --text:#2c1810; --sub:#9a7060; --ink:#4a3020;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Zen Maru Gothic',sans-serif;font-weight:300;font-size:14px;line-height:1.6;}
+  header{background:var(--red);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(192,57,43,.3);}
+  .header-inner{max-width:640px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+  .header-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:8px;}
+  .header-sub{font-size:10px;opacity:.8;margin-top:2px;}
+  .btn-new{background:#fff;color:var(--red);border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;white-space:nowrap;}
+  .header-back{color:#fff;text-decoration:none;font-size:12px;opacity:.8;margin-right:10px;}
+
+  .container{max-width:640px;margin:0 auto;padding:16px;}
+
+  .stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+  .stat-num{font-family:'Shippori Mincho',serif;font-size:26px;font-weight:600;color:var(--red);line-height:1;}
+  .stat-label{font-size:10px;color:var(--sub);margin-top:4px;}
+
+  .log-list{display:flex;flex-direction:column;gap:12px;}
+  .log-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow .15s;animation:slideIn .2s ease;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .log-card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);gap:10px;}
+  .log-name{font-family:'Shippori Mincho',serif;font-size:17px;font-weight:600;flex:1;}
+  .log-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+  .log-date{font-size:11px;color:var(--sub);}
+  .log-author{font-size:10px;background:var(--red-pale);color:var(--red);padding:2px 8px;border-radius:10px;}
+  .log-card-body{padding:12px 16px;}
+  .log-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .tag{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:500;}
+  .tag-method{background:#fff3e0;color:#e65100;}
+  .tag-sauce{background:#e8f5e9;color:#2e7d32;}
+  .log-rating{display:flex;gap:2px;margin-bottom:8px;}
+  .star{font-size:16px;}
+  .star.on{color:var(--yellow);}
+  .star.off{color:#e0d0c0;}
+  .log-row{display:flex;gap:8px;margin-bottom:6px;font-size:12px;align-items:flex-start;}
+  .log-row-label{color:var(--sub);white-space:nowrap;min-width:44px;}
+  .log-row-value{color:var(--ink);line-height:1.5;}
+  .log-comment{margin-top:8px;padding:8px 10px;background:var(--red-pale);border-radius:8px;font-size:12px;color:var(--ink);line-height:1.6;border-left:3px solid var(--red);}
+  .log-next{margin-top:8px;padding:8px 10px;background:var(--green-pale);border-radius:8px;font-size:12px;color:var(--ink);line-height:1.6;border-left:3px solid var(--green);}
+
+  /* コメント欄 */
+  .comments-area{padding:10px 16px;border-top:1px solid var(--border);background:#fafaf8;}
+  .comment-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px;}
+  .comment-author{font-weight:500;color:var(--red);white-space:nowrap;}
+  .comment-text{color:var(--ink);flex:1;}
+  .comment-date{font-size:10px;color:var(--sub);white-space:nowrap;}
+  .comment-form{display:flex;gap:6px;margin-top:8px;}
+  .comment-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;background:#fff;outline:none;}
+  .comment-input:focus{border-color:var(--red);}
+  .comment-author-input{width:70px;border:1px solid var(--border);border-radius:8px;padding:7px 8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;background:#fff;outline:none;}
+  .comment-author-input:focus{border-color:var(--red);}
+  .btn-comment{background:var(--red);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;white-space:nowrap;}
+
+  .log-actions{padding:8px 16px 12px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn-edit{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:11px;color:var(--sub);cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:all .15s;}
+  .btn-edit:hover{border-color:var(--blue);color:var(--blue);}
+  .btn-delete{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:11px;color:#bbb;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:all .15s;}
+  .btn-delete:hover{border-color:var(--red);color:var(--red);}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--sub);}
+  .empty .emoji{font-size:48px;margin-bottom:16px;}
+  .loading{text-align:center;padding:40px;color:var(--sub);font-size:13px;}
+
+  /* モーダル共通 */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(44,24,16,.5);z-index:200;align-items:flex-end;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;padding:20px 20px 40px;animation:slideUp .25s ease;}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+  .modal-title{font-family:'Shippori Mincho',serif;font-size:18px;font-weight:600;text-align:center;margin-bottom:20px;color:var(--red);}
+  .form-group{margin-bottom:16px;}
+  .form-label{display:block;font-size:12px;font-weight:500;color:var(--sub);margin-bottom:6px;}
+  .form-input,.form-textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;}
+  .form-input:focus,.form-textarea:focus{border-color:var(--red);background:#fff;}
+  .form-textarea{resize:vertical;min-height:80px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .method-options{display:flex;gap:8px;flex-wrap:wrap;}
+  .method-opt{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px;transition:all .15s;user-select:none;}
+  .method-opt input{display:none;}
+  .method-opt.selected{border-color:var(--orange);background:#fff3e0;color:var(--orange);font-weight:500;}
+  .star-input{display:flex;gap:6px;}
+  .star-btn{font-size:28px;background:none;border:none;cursor:pointer;transition:transform .1s;line-height:1;color:#e0d0c0;}
+  .star-btn.on{color:var(--yellow);}
+  .star-btn:hover{transform:scale(1.2);}
+  .form-divider{height:1px;background:var(--border);margin:20px 0 16px;position:relative;}
+  .form-divider span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);padding:0 10px;font-size:11px;color:var(--sub);}
+  .btn-submit{width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:opacity .15s;margin-top:8px;}
+  .btn-submit:hover{opacity:.85;}
+  .btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+  .btn-cancel{width:100%;background:none;border:1px solid var(--border);border-radius:12px;padding:12px;font-size:14px;color:var(--sub);font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;margin-top:8px;}
+  .error-msg{color:var(--red);font-size:12px;text-align:center;margin-top:8px;display:none;}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center;">
+      <a href="index.html" class="header-back">← トップ</a>
+      <div>
+        <div class="header-title">🥟 餃子ログ</div>
+        <div class="header-sub">家族の餃子レシピ記録帳</div>
+      </div>
+    </div>
+    <button class="btn-new" onclick="openModal()">＋ 記録する</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">記録数</div></div>
+    <div class="stat-card"><div class="stat-num" id="statAvg">—</div><div class="stat-label">平均評価</div></div>
+    <div class="stat-card"><div class="stat-num" id="statBest">—</div><div class="stat-label">最高評価</div></div>
+  </div>
+  <div id="logList" class="log-list"><div class="loading">🥟 読み込み中…</div></div>
+</div>
+
+<!-- 記録・編集モーダル -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event,'modalOverlay')">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">🥟 新しい餃子を記録</div>
+    <input type="hidden" id="editingId">
+    <div class="form-group">
+      <label class="form-label">餃子の名前</label>
+      <input type="text" class="form-input" id="fName" placeholder="例：ニラにんにく餃子">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">日付</label>
+        <input type="date" class="form-input" id="fDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label">記録者</label>
+        <input type="text" class="form-input" id="fAuthor" placeholder="パパ">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">材料・具材</label>
+      <textarea class="form-textarea" id="fIngredients" placeholder="豚ひき肉、キャベツ、ニラ…" style="min-height:60px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">調理法</label>
+      <div class="method-options">
+        <label class="method-opt" id="m-yaki"><input type="checkbox">🔥 焼き</label>
+        <label class="method-opt" id="m-age"><input type="checkbox">🫕 揚げ</label>
+        <label class="method-opt" id="m-mizu"><input type="checkbox">💧 水餃子</label>
+        <label class="method-opt" id="m-mushi"><input type="checkbox">♨️ 蒸し</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">タレ・つけダレ</label>
+      <input type="text" class="form-input" id="fSauce" placeholder="酢醤油、ラー油、ポン酢…">
+    </div>
+    <div class="form-group">
+      <label class="form-label">評価 ★</label>
+      <div class="star-input">
+        <button class="star-btn" type="button" onclick="setRating(1)">★</button>
+        <button class="star-btn" type="button" onclick="setRating(2)">★</button>
+        <button class="star-btn" type="button" onclick="setRating(3)">★</button>
+        <button class="star-btn" type="button" onclick="setRating(4)">★</button>
+        <button class="star-btn" type="button" onclick="setRating(5)">★</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">感想・メモ</label>
+      <textarea class="form-textarea" id="fComment" placeholder="皮がパリパリで最高！"></textarea>
+    </div>
+    <div class="form-divider"><span>次回への課題</span></div>
+    <div class="form-group">
+      <label class="form-label">🌱 次回やること・試したいこと</label>
+      <textarea class="form-textarea" id="fNext" placeholder="ニラをもっと増やす、皮を薄めに…"></textarea>
+    </div>
+    <div class="error-msg" id="formError">日付と評価（★）は必須です</div>
+    <button class="btn-submit" id="btnSubmit" onclick="submitLog()">🥟 記録する</button>
+    <button class="btn-cancel" type="button" onclick="closeModal('modalOverlay')">キャンセル</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://qkynkpvftzckpvbkgexr.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFreW5rcHZmdHpja3B2YmtnZXhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5NzM4NjQsImV4cCI6MjA5MzU0OTg2NH0.YuDWdp6u7KU1XpxPzbKbEzlw_GVR951PVwb1fKsYDsI';
+const H={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};
+const DELETE_PASS='5114';
+let currentRating=0;
+const METHODS=[{id:'m-yaki',val:'焼き'},{id:'m-age',val:'揚げ'},{id:'m-mizu',val:'水餃子'},{id:'m-mushi',val:'蒸し'}];
+METHODS.forEach(({id})=>document.getElementById(id).addEventListener('click',function(){this.classList.toggle('selected');}));
+
+async function loadLogs(){
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?order=date.desc,created_at.desc`,{headers:H});
+    if(!res.ok)throw new Error(await res.text());
+    const data=await res.json();
+    renderLogs(data);
+    renderStats(data);
+  }catch(e){
+    document.getElementById('logList').innerHTML=`<div class="empty"><div class="emoji">⚠️</div><p>読み込みに失敗しました<br><small>${e.message}</small></p></div>`;
+  }
+}
+
+function renderLogs(data){
+  const list=document.getElementById('logList');
+  if(!data.length){list.innerHTML=`<div class="empty"><div class="emoji">🥟</div><p>まだ記録がありません。<br>最初の餃子を記録しましょう！</p></div>`;return;}
+  list.innerHTML=data.map(item=>{
+    const stars=[1,2,3,4,5].map(i=>`<span class="star ${i<=item.rating?'on':'off'}">★</span>`).join('');
+    const methods=item.cooking_method?item.cooking_method.split(',').map(m=>`<span class="tag tag-method">${m.trim()}</span>`).join(''):'';
+    const sauce=item.sauce?`<span class="tag tag-sauce">🥣 ${item.sauce}</span>`:'';
+    const dateStr=item.date?new Date(item.date+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}):'';
+    const comments=item.comments?JSON.parse(item.comments):[];
+    const commentsHTML=comments.map(c=>`
+      <div class="comment-item">
+        <span class="comment-author">${escHtml(c.author||'名無し')}</span>
+        <span class="comment-text">${escHtml(c.text)}</span>
+        <span class="comment-date">${c.date||''}</span>
+      </div>`).join('');
+    return `<div class="log-card" id="card-${item.id}">
+      <div class="log-card-header">
+        <div class="log-name">${escHtml(item.name||'名無し餃子')}</div>
+        <div class="log-meta">
+          <div class="log-date">${dateStr}</div>
+          ${item.author?`<div class="log-author">${escHtml(item.author)}</div>`:''}
+        </div>
+      </div>
+      <div class="log-card-body">
+        <div class="log-rating">${stars}</div>
+        <div class="log-tags">${methods}${sauce}</div>
+        ${item.ingredients?`<div class="log-row"><span class="log-row-label">具材</span><span class="log-row-value">${escHtml(item.ingredients)}</span></div>`:''}
+        ${item.comment?`<div class="log-comment">💬 ${escHtml(item.comment)}</div>`:''}
+        ${item.next_challenge?`<div class="log-next">🌱 次回：${escHtml(item.next_challenge)}</div>`:''}
+      </div>
+      <div class="comments-area">
+        <div id="comments-${item.id}">${commentsHTML}</div>
+        <div class="comment-form">
+          <input class="comment-author-input" id="cAuthor-${item.id}" placeholder="名前" value="${localStorage.getItem('gyoza_author')||''}">
+          <input class="comment-input" id="cText-${item.id}" placeholder="コメントを追加…">
+          <button class="btn-comment" onclick="addComment('${item.id}')">送信</button>
+        </div>
+      </div>
+      <div class="log-actions">
+        <button class="btn-edit" onclick="openEdit(${JSON.stringify(item).replace(/"/g,'&quot;')})">✏️ 編集</button>
+        <button class="btn-delete" onclick="deleteLog('${item.id}')">🗑 削除</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStats(data){
+  document.getElementById('statTotal').textContent=data.length;
+  const ratings=data.filter(d=>d.rating).map(d=>d.rating);
+  if(ratings.length){
+    document.getElementById('statAvg').textContent=(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+'★';
+    document.getElementById('statBest').textContent=Math.max(...ratings)+'★';
+  }else{
+    document.getElementById('statAvg').textContent='—';
+    document.getElementById('statBest').textContent='—';
+  }
+}
+
+async function addComment(id){
+  const authorEl=document.getElementById('cAuthor-'+id);
+  const textEl=document.getElementById('cText-'+id);
+  const author=authorEl.value.trim()||'名無し';
+  const text=textEl.value.trim();
+  if(!text)return;
+  localStorage.setItem('gyoza_author',author);
+
+  // 既存コメントを取得
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${id}&select=comments`,{headers:H});
+  const data=await res.json();
+  const comments=data[0]?.comments?JSON.parse(data[0].comments):[];
+  const now=new Date().toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
+  comments.push({author,text,date:now});
+
+  await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${id}`,{
+    method:'PATCH',
+    headers:{...H,'Prefer':'return=minimal'},
+    body:JSON.stringify({comments:JSON.stringify(comments)})
+  });
+  textEl.value='';
+  loadLogs();
+}
+
+async function deleteLog(id){
+  const pass=prompt('削除するには4桁のパスワードを入力してください：');
+  if(pass===null)return;
+  if(pass!==DELETE_PASS){alert('パスワードが違います');return;}
+  await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${id}`,{method:'DELETE',headers:H});
+  loadLogs();
+}
+
+function openEdit(item){
+  document.getElementById('editingId').value=item.id;
+  document.getElementById('modalTitle').textContent='✏️ 記録を編集';
+  document.getElementById('btnSubmit').textContent='✏️ 更新する';
+  document.getElementById('fName').value=item.name||'';
+  document.getElementById('fDate').value=item.date||'';
+  document.getElementById('fAuthor').value=item.author||'';
+  document.getElementById('fIngredients').value=item.ingredients||'';
+  document.getElementById('fSauce').value=item.sauce||'';
+  document.getElementById('fComment').value=item.comment||'';
+  document.getElementById('fNext').value=item.next_challenge||'';
+  currentRating=item.rating||0;
+  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<currentRating));
+  METHODS.forEach(({id,val})=>{
+    const el=document.getElementById(id);
+    el.classList.toggle('selected',(item.cooking_method||'').includes(val));
+  });
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openModal(){
+  document.getElementById('editingId').value='';
+  document.getElementById('modalTitle').textContent='🥟 新しい餃子を記録';
+  document.getElementById('btnSubmit').textContent='🥟 記録する';
+  document.getElementById('fDate').value=new Date().toISOString().split('T')[0];
+  const saved=localStorage.getItem('gyoza_author');
+  if(saved)document.getElementById('fAuthor').value=saved;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';resetForm();}
+function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+function resetForm(){
+  ['fName','fIngredients','fSauce','fComment','fDate','fNext'].forEach(id=>document.getElementById(id).value='');
+  currentRating=0;
+  METHODS.forEach(({id})=>document.getElementById(id).classList.remove('selected'));
+  document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('formError').style.display='none';
+  document.getElementById('btnSubmit').disabled=false;
+}
+function setRating(n){currentRating=n;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<n));}
+
+async function submitLog(){
+  const errEl=document.getElementById('formError');
+  const btn=document.getElementById('btnSubmit');
+  const date=document.getElementById('fDate').value;
+  if(!date||!currentRating){errEl.style.display='block';return;}
+  errEl.style.display='none';
+  btn.disabled=true;btn.textContent='保存中…';
+  const author=document.getElementById('fAuthor').value.trim();
+  if(author)localStorage.setItem('gyoza_author',author);
+  const selectedMethods=METHODS.filter(({id})=>document.getElementById(id).classList.contains('selected')).map(({val})=>val);
+  const body={date,name:document.getElementById('fName').value.trim()||'名無し餃子',ingredients:document.getElementById('fIngredients').value.trim(),cooking_method:selectedMethods.join(', '),sauce:document.getElementById('fSauce').value.trim(),rating:currentRating,comment:document.getElementById('fComment').value.trim(),next_challenge:document.getElementById('fNext').value.trim(),author};
+  const editingId=document.getElementById('editingId').value;
+  try{
+    let res;
+    if(editingId){
+      res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${editingId}`,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(body)});
+    }else{
+      res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log`,{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(body)});
+    }
+    if(!res.ok)throw new Error(await res.text());
+    closeModal('modalOverlay');
+    loadLogs();
+  }catch(e){
+    errEl.textContent='保存に失敗しました: '+e.message;
+    errEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent=editingId?'✏️ 更新する':'🥟 記録する';
+  }
+}
+
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// commentsカラムを追加するSQL実行済み確認用
+loadLogs();
+</script>
+</body>
+</html>
