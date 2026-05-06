@@ -6,19 +6,21 @@
 <title>餃子ログ 🥟</title>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red:#c0392b; --red-pale:#fdf0ee; --orange:#e67e22; --yellow:#f39c12;
-    --green:#27ae60; --green-pale:#eafaf1; --blue:#2980b9; --blue-pale:#eaf4fb;
-    --bg:#fffdf9; --card:#fff; --border:#f0e8e0; --text:#2c1810; --sub:#9a7060; --ink:#4a3020;
+  :root{
+    --red:#c0392b;--red-pale:#fdf0ee;--orange:#e67e22;--yellow:#f39c12;
+    --green:#27ae60;--green-pale:#eafaf1;--blue:#2980b9;--blue-pale:#eaf4fb;
+    --bg:#fffdf9;--card:#fff;--border:#f0e8e0;--text:#2c1810;--sub:#9a7060;--ink:#4a3020;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--bg);color:var(--text);font-family:'Zen Maru Gothic',sans-serif;font-weight:300;font-size:14px;line-height:1.6;}
+
   header{background:var(--red);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(192,57,43,.3);}
   .header-inner{max-width:640px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+  .header-left{display:flex;align-items:center;gap:8px;}
+  .header-back{color:#fff;text-decoration:none;font-size:12px;opacity:.8;}
   .header-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:600;letter-spacing:.05em;display:flex;align-items:center;gap:8px;}
   .header-sub{font-size:10px;opacity:.8;margin-top:2px;}
   .btn-new{background:#fff;color:var(--red);border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;white-space:nowrap;}
-  .header-back{color:#fff;text-decoration:none;font-size:12px;opacity:.8;margin-right:10px;}
 
   .container{max-width:640px;margin:0 auto;padding:16px;}
 
@@ -27,14 +29,16 @@
   .stat-num{font-family:'Shippori Mincho',serif;font-size:26px;font-weight:600;color:var(--red);line-height:1;}
   .stat-label{font-size:10px;color:var(--sub);margin-top:4px;}
 
-  .log-list{display:flex;flex-direction:column;gap:12px;}
-  .log-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow .15s;animation:slideIn .2s ease;}
+  .log-list{display:flex;flex-direction:column;gap:16px;}
+  .log-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;animation:slideIn .2s ease;}
   @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
   .log-card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--border);gap:10px;}
   .log-name{font-family:'Shippori Mincho',serif;font-size:17px;font-weight:600;flex:1;}
   .log-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
   .log-date{font-size:11px;color:var(--sub);}
   .log-author{font-size:10px;background:var(--red-pale);color:var(--red);padding:2px 8px;border-radius:10px;}
+
   .log-card-body{padding:12px 16px;}
   .log-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
   .tag{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:500;}
@@ -50,18 +54,48 @@
   .log-comment{margin-top:8px;padding:8px 10px;background:var(--red-pale);border-radius:8px;font-size:12px;color:var(--ink);line-height:1.6;border-left:3px solid var(--red);}
   .log-next{margin-top:8px;padding:8px 10px;background:var(--green-pale);border-radius:8px;font-size:12px;color:var(--ink);line-height:1.6;border-left:3px solid var(--green);}
 
-  /* コメント欄 */
-  .comments-area{padding:10px 16px;border-top:1px solid var(--border);background:#fafaf8;}
-  .comment-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px;}
-  .comment-author{font-weight:500;color:var(--red);white-space:nowrap;}
-  .comment-text{color:var(--ink);flex:1;}
-  .comment-date{font-size:10px;color:var(--sub);white-space:nowrap;}
-  .comment-form{display:flex;gap:6px;margin-top:8px;}
-  .comment-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;background:#fff;outline:none;}
-  .comment-input:focus{border-color:var(--red);}
-  .comment-author-input{width:70px;border:1px solid var(--border);border-radius:8px;padding:7px 8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;background:#fff;outline:none;}
-  .comment-author-input:focus{border-color:var(--red);}
-  .btn-comment{background:var(--red);color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;white-space:nowrap;}
+  /* レビューエリア */
+  .reviews-area{border-top:1px solid var(--border);padding:12px 16px;background:#fafaf8;}
+  .reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .reviews-title{font-size:12px;font-weight:500;color:var(--sub);}
+  .reviews-avg{display:flex;align-items:center;gap:6px;}
+  .avg-stars{display:flex;gap:1px;}
+  .avg-star{font-size:14px;color:var(--yellow);}
+  .avg-num{font-family:'Shippori Mincho',serif;font-size:16px;font-weight:600;color:var(--red);}
+  .avg-count{font-size:10px;color:var(--sub);}
+
+  .review-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .review-item{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+  .review-item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .reviewer-name{font-size:12px;font-weight:500;color:var(--ink);}
+  .review-stars{display:flex;gap:1px;}
+  .review-star{font-size:13px;}
+  .review-star.on{color:var(--yellow);}
+  .review-star.off{color:#e0d0c0;}
+  .review-want{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;}
+  .review-want.yes{background:var(--green-pale);color:var(--green);}
+  .review-want.no{background:var(--red-pale);color:var(--red);}
+  .review-comment{font-size:12px;color:var(--sub);line-height:1.6;}
+
+  /* レビュー投稿フォーム */
+  .review-form{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;}
+  .review-form-title{font-size:11px;font-weight:500;color:var(--sub);margin-bottom:10px;text-align:center;}
+  .review-form-row{display:flex;gap:8px;margin-bottom:10px;}
+  .review-name-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);outline:none;}
+  .review-name-input:focus{border-color:var(--red);}
+  .review-star-input{display:flex;gap:4px;justify-content:center;margin-bottom:10px;}
+  .review-star-btn{font-size:26px;background:none;border:none;cursor:pointer;color:#e0d0c0;transition:transform .1s;line-height:1;}
+  .review-star-btn.on{color:var(--yellow);}
+  .review-star-btn:hover{transform:scale(1.2);}
+  .review-comment-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);outline:none;resize:none;min-height:60px;}
+  .review-comment-input:focus{border-color:var(--red);}
+  .want-again-row{display:flex;gap:8px;margin-bottom:10px;}
+  .want-btn{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;background:#fff;transition:all .15s;text-align:center;}
+  .want-btn.selected-yes{border-color:var(--green);background:var(--green-pale);color:var(--green);font-weight:500;}
+  .want-btn.selected-no{border-color:var(--red);background:var(--red-pale);color:var(--red);font-weight:500;}
+  .btn-review-submit{width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:opacity .15s;}
+  .btn-review-submit:hover{opacity:.85;}
+  .btn-review-submit:disabled{opacity:.5;}
 
   .log-actions{padding:8px 16px 12px;display:flex;justify-content:flex-end;gap:8px;}
   .btn-edit{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:11px;color:var(--sub);cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:all .15s;}
@@ -73,7 +107,7 @@
   .empty .emoji{font-size:48px;margin-bottom:16px;}
   .loading{text-align:center;padding:40px;color:var(--sub);font-size:13px;}
 
-  /* モーダル共通 */
+  /* モーダル */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(44,24,16,.5);z-index:200;align-items:flex-end;justify-content:center;}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:92vh;overflow-y:auto;padding:20px 20px 40px;animation:slideUp .25s ease;}
@@ -105,7 +139,7 @@
 <body>
 <header>
   <div class="header-inner">
-    <div style="display:flex;align-items:center;">
+    <div class="header-left">
       <a href="index.html" class="header-back">← トップ</a>
       <div>
         <div class="header-title">🥟 餃子ログ</div>
@@ -162,7 +196,7 @@
       <input type="text" class="form-input" id="fSauce" placeholder="酢醤油、ラー油、ポン酢…">
     </div>
     <div class="form-group">
-      <label class="form-label">評価 ★</label>
+      <label class="form-label">作者の評価 ★</label>
       <div class="star-input">
         <button class="star-btn" type="button" onclick="setRating(1)">★</button>
         <button class="star-btn" type="button" onclick="setRating(2)">★</button>
@@ -177,8 +211,8 @@
     </div>
     <div class="form-divider"><span>次回への課題</span></div>
     <div class="form-group">
-      <label class="form-label">🌱 次回やること・試したいこと</label>
-      <textarea class="form-textarea" id="fNext" placeholder="ニラをもっと増やす、皮を薄めに…"></textarea>
+      <label class="form-label">🌱 次回やること</label>
+      <textarea class="form-textarea" id="fNext" placeholder="ニラをもっと増やす…"></textarea>
     </div>
     <div class="error-msg" id="formError">日付と評価（★）は必須です</div>
     <button class="btn-submit" id="btnSubmit" onclick="submitLog()">🥟 記録する</button>
@@ -195,33 +229,51 @@ let currentRating=0;
 const METHODS=[{id:'m-yaki',val:'焼き'},{id:'m-age',val:'揚げ'},{id:'m-mizu',val:'水餃子'},{id:'m-mushi',val:'蒸し'}];
 METHODS.forEach(({id})=>document.getElementById(id).addEventListener('click',function(){this.classList.toggle('selected');}));
 
+// レビューの星評価（カードごと）
+const reviewRatings={};
+const reviewWants={};
+
 async function loadLogs(){
   try{
     const res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?order=date.desc,created_at.desc`,{headers:H});
     if(!res.ok)throw new Error(await res.text());
-    const data=await res.json();
-    renderLogs(data);
-    renderStats(data);
+    const logs=await res.json();
+    // レビューも一括取得
+    const revRes=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_review?order=created_at.asc`,{headers:H});
+    const reviews=revRes.ok?await revRes.json():[];
+    renderLogs(logs,reviews);
+    renderStats(logs,reviews);
   }catch(e){
     document.getElementById('logList').innerHTML=`<div class="empty"><div class="emoji">⚠️</div><p>読み込みに失敗しました<br><small>${e.message}</small></p></div>`;
   }
 }
 
-function renderLogs(data){
+function renderLogs(logs,allReviews){
   const list=document.getElementById('logList');
-  if(!data.length){list.innerHTML=`<div class="empty"><div class="emoji">🥟</div><p>まだ記録がありません。<br>最初の餃子を記録しましょう！</p></div>`;return;}
-  list.innerHTML=data.map(item=>{
+  if(!logs.length){list.innerHTML=`<div class="empty"><div class="emoji">🥟</div><p>まだ記録がありません。<br>最初の餃子を記録しましょう！</p></div>`;return;}
+  list.innerHTML=logs.map(item=>{
     const stars=[1,2,3,4,5].map(i=>`<span class="star ${i<=item.rating?'on':'off'}">★</span>`).join('');
     const methods=item.cooking_method?item.cooking_method.split(',').map(m=>`<span class="tag tag-method">${m.trim()}</span>`).join(''):'';
     const sauce=item.sauce?`<span class="tag tag-sauce">🥣 ${item.sauce}</span>`:'';
     const dateStr=item.date?new Date(item.date+'T00:00:00').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'}):'';
-    const comments=item.comments?JSON.parse(item.comments):[];
-    const commentsHTML=comments.map(c=>`
-      <div class="comment-item">
-        <span class="comment-author">${escHtml(c.author||'名無し')}</span>
-        <span class="comment-text">${escHtml(c.text)}</span>
-        <span class="comment-date">${c.date||''}</span>
+
+    // このログのレビュー
+    const reviews=allReviews.filter(r=>r.gyoza_id===item.id);
+    const avgRating=reviews.length?(reviews.reduce((a,b)=>a+(b.rating||0),0)/reviews.length).toFixed(1):'—';
+    const wantCount=reviews.filter(r=>r.want_again).length;
+
+    const reviewsHTML=reviews.map(r=>`
+      <div class="review-item">
+        <div class="review-item-top">
+          <span class="reviewer-name">👤 ${escHtml(r.reviewer)}</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div class="review-stars">${[1,2,3,4,5].map(i=>`<span class="review-star ${i<=(r.rating||0)?'on':'off'}">★</span>`).join('')}</div>
+            <span class="review-want ${r.want_again?'yes':'no'}">${r.want_again?'また食べたい！':'もういいかな'}</span>
+          </div>
+        </div>
+        ${r.comment?`<div class="review-comment">${escHtml(r.comment)}</div>`:''}
       </div>`).join('');
+
     return `<div class="log-card" id="card-${item.id}">
       <div class="log-card-header">
         <div class="log-name">${escHtml(item.name||'名無し餃子')}</div>
@@ -237,14 +289,35 @@ function renderLogs(data){
         ${item.comment?`<div class="log-comment">💬 ${escHtml(item.comment)}</div>`:''}
         ${item.next_challenge?`<div class="log-next">🌱 次回：${escHtml(item.next_challenge)}</div>`:''}
       </div>
-      <div class="comments-area">
-        <div id="comments-${item.id}">${commentsHTML}</div>
-        <div class="comment-form">
-          <input class="comment-author-input" id="cAuthor-${item.id}" placeholder="名前" value="${localStorage.getItem('gyoza_author')||''}">
-          <input class="comment-input" id="cText-${item.id}" placeholder="コメントを追加…">
-          <button class="btn-comment" onclick="addComment('${item.id}')">送信</button>
+
+      <div class="reviews-area">
+        <div class="reviews-header">
+          <span class="reviews-title">みんなの評価（${reviews.length}件）${wantCount>0?` · また食べたい ${wantCount}人`:''}</span>
+          ${reviews.length>0?`<div class="reviews-avg"><div class="avg-stars">${[1,2,3,4,5].map(i=>`<span class="avg-star">${i<=Math.round(avgRating)?'★':'☆'}</span>`).join('')}</div><span class="avg-num">${avgRating}</span></div>`:''}
+        </div>
+        <div class="review-list">${reviewsHTML}</div>
+
+        <div class="review-form">
+          <div class="review-form-title">📝 評価を投稿する</div>
+          <div class="review-form-row">
+            <input class="review-name-input" id="rName-${item.id}" placeholder="あなたの名前" value="${localStorage.getItem('gyoza_author')||''}">
+          </div>
+          <div class="review-star-input" id="rStars-${item.id}">
+            <button class="review-star-btn" type="button" onclick="setReviewRating('${item.id}',1)">★</button>
+            <button class="review-star-btn" type="button" onclick="setReviewRating('${item.id}',2)">★</button>
+            <button class="review-star-btn" type="button" onclick="setReviewRating('${item.id}',3)">★</button>
+            <button class="review-star-btn" type="button" onclick="setReviewRating('${item.id}',4)">★</button>
+            <button class="review-star-btn" type="button" onclick="setReviewRating('${item.id}',5)">★</button>
+          </div>
+          <div class="want-again-row">
+            <button class="want-btn" id="wantYes-${item.id}" type="button" onclick="setWant('${item.id}',true)">😋 また食べたい！</button>
+            <button class="want-btn" id="wantNo-${item.id}" type="button" onclick="setWant('${item.id}',false)">🤔 もういいかな</button>
+          </div>
+          <textarea class="review-comment-input" id="rComment-${item.id}" placeholder="感想を書いてください…"></textarea>
+          <button class="btn-review-submit" id="rBtn-${item.id}" onclick="submitReview('${item.id}')">投稿する</button>
         </div>
       </div>
+
       <div class="log-actions">
         <button class="btn-edit" onclick="openEdit(${JSON.stringify(item).replace(/"/g,'&quot;')})">✏️ 編集</button>
         <button class="btn-delete" onclick="deleteLog('${item.id}')">🗑 削除</button>
@@ -253,9 +326,9 @@ function renderLogs(data){
   }).join('');
 }
 
-function renderStats(data){
-  document.getElementById('statTotal').textContent=data.length;
-  const ratings=data.filter(d=>d.rating).map(d=>d.rating);
+function renderStats(logs,reviews){
+  document.getElementById('statTotal').textContent=logs.length;
+  const ratings=logs.filter(d=>d.rating).map(d=>d.rating);
   if(ratings.length){
     document.getElementById('statAvg').textContent=(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+'★';
     document.getElementById('statBest').textContent=Math.max(...ratings)+'★';
@@ -265,28 +338,42 @@ function renderStats(data){
   }
 }
 
-async function addComment(id){
-  const authorEl=document.getElementById('cAuthor-'+id);
-  const textEl=document.getElementById('cText-'+id);
-  const author=authorEl.value.trim()||'名無し';
-  const text=textEl.value.trim();
-  if(!text)return;
-  localStorage.setItem('gyoza_author',author);
+function setReviewRating(id,n){
+  reviewRatings[id]=n;
+  const btns=document.querySelectorAll(`#rStars-${id} .review-star-btn`);
+  btns.forEach((b,i)=>b.classList.toggle('on',i<n));
+}
 
-  // 既存コメントを取得
-  const res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${id}&select=comments`,{headers:H});
-  const data=await res.json();
-  const comments=data[0]?.comments?JSON.parse(data[0].comments):[];
-  const now=new Date().toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});
-  comments.push({author,text,date:now});
+function setWant(id,val){
+  reviewWants[id]=val;
+  document.getElementById('wantYes-'+id).className='want-btn'+(val?' selected-yes':'');
+  document.getElementById('wantNo-'+id).className='want-btn'+(!val?' selected-no':'');
+}
 
-  await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${id}`,{
-    method:'PATCH',
-    headers:{...H,'Prefer':'return=minimal'},
-    body:JSON.stringify({comments:JSON.stringify(comments)})
-  });
-  textEl.value='';
-  loadLogs();
+async function submitReview(id){
+  const btn=document.getElementById('rBtn-'+id);
+  const name=document.getElementById('rName-'+id).value.trim();
+  const rating=reviewRatings[id]||0;
+  const comment=document.getElementById('rComment-'+id).value.trim();
+  const wantAgain=reviewWants[id]!==undefined?reviewWants[id]:true;
+  if(!name){alert('名前を入力してください');return;}
+  if(!rating){alert('★評価を選んでください');return;}
+  localStorage.setItem('gyoza_author',name);
+  btn.disabled=true;btn.textContent='投稿中…';
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_review`,{
+      method:'POST',
+      headers:{...H,'Prefer':'return=minimal'},
+      body:JSON.stringify({gyoza_id:id,reviewer:name,rating,comment,want_again:wantAgain})
+    });
+    if(!res.ok)throw new Error(await res.text());
+    delete reviewRatings[id];
+    delete reviewWants[id];
+    loadLogs();
+  }catch(e){
+    alert('投稿に失敗しました: '+e.message);
+    btn.disabled=false;btn.textContent='投稿する';
+  }
 }
 
 async function deleteLog(id){
@@ -310,10 +397,7 @@ function openEdit(item){
   document.getElementById('fNext').value=item.next_challenge||'';
   currentRating=item.rating||0;
   document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<currentRating));
-  METHODS.forEach(({id,val})=>{
-    const el=document.getElementById(id);
-    el.classList.toggle('selected',(item.cooking_method||'').includes(val));
-  });
+  METHODS.forEach(({id,val})=>document.getElementById(id).classList.toggle('selected',(item.cooking_method||'').includes(val)));
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -328,7 +412,6 @@ function openModal(){
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';resetForm();}
 function closeModalOutside(e,id){if(e.target===document.getElementById(id))closeModal(id);}
 function resetForm(){
@@ -346,34 +429,25 @@ async function submitLog(){
   const btn=document.getElementById('btnSubmit');
   const date=document.getElementById('fDate').value;
   if(!date||!currentRating){errEl.style.display='block';return;}
-  errEl.style.display='none';
-  btn.disabled=true;btn.textContent='保存中…';
+  errEl.style.display='none';btn.disabled=true;btn.textContent='保存中…';
   const author=document.getElementById('fAuthor').value.trim();
   if(author)localStorage.setItem('gyoza_author',author);
   const selectedMethods=METHODS.filter(({id})=>document.getElementById(id).classList.contains('selected')).map(({val})=>val);
   const body={date,name:document.getElementById('fName').value.trim()||'名無し餃子',ingredients:document.getElementById('fIngredients').value.trim(),cooking_method:selectedMethods.join(', '),sauce:document.getElementById('fSauce').value.trim(),rating:currentRating,comment:document.getElementById('fComment').value.trim(),next_challenge:document.getElementById('fNext').value.trim(),author};
   const editingId=document.getElementById('editingId').value;
   try{
-    let res;
-    if(editingId){
-      res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${editingId}`,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(body)});
-    }else{
-      res=await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log`,{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(body)});
-    }
+    const res=editingId
+      ?await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log?id=eq.${editingId}`,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(body)})
+      :await fetch(`${SUPABASE_URL}/rest/v1/gyoza_log`,{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(body)});
     if(!res.ok)throw new Error(await res.text());
-    closeModal('modalOverlay');
-    loadLogs();
+    closeModal('modalOverlay');loadLogs();
   }catch(e){
-    errEl.textContent='保存に失敗しました: '+e.message;
-    errEl.style.display='block';
-    btn.disabled=false;
-    btn.textContent=editingId?'✏️ 更新する':'🥟 記録する';
+    errEl.textContent='保存に失敗しました: '+e.message;errEl.style.display='block';
+    btn.disabled=false;btn.textContent=editingId?'✏️ 更新する':'🥟 記録する';
   }
 }
 
 function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// commentsカラムを追加するSQL実行済み確認用
 loadLogs();
 </script>
 </body>
