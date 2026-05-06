@@ -146,7 +146,7 @@
         <div class="header-sub">家族の餃子レシピ記録帳</div>
       </div>
     </div>
-    <button class="btn-new" onclick="openModal()">＋ 記録する</button>
+    <button class="btn-new" onclick="openModal()">＋ 新規登録</button>
   </div>
 </header>
 
@@ -298,7 +298,7 @@ function renderLogs(logs,allReviews){
         <div class="review-list">${reviewsHTML}</div>
 
         <div class="review-form">
-          <div class="review-form-title">📝 評価を投稿する</div>
+          <div class="review-form-title" style="font-size:15px;font-weight:700;color:var(--red);margin-bottom:12px;"><span style="font-size:28px;display:block;margin-bottom:4px;">🥟⭐</span>この餃子を評価する</div>
           <div class="review-form-row">
             <input class="review-name-input" id="rName-${item.id}" placeholder="あなたの名前" value="${localStorage.getItem('gyoza_author')||''}">
           </div>
